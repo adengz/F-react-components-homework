@@ -7,8 +7,8 @@ import shopData from '../data/shop.json';
 import answersData from '../data/answers.json';
 
 class Chat extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       shop: {},
       messages: [],
@@ -27,13 +27,18 @@ class Chat extends Component {
     }, 1000);
   }
 
+  handleQuestion = (text) => {
+    const customerMessage = { text, role: 'CUSTOMER' };
+    this.setState((state) => ({ messages: state.messages.concat(customerMessage) }));
+  };
+
   render() {
     const { shop, messages } = this.state;
     return (
       <main className="Chat">
         <ChatHeader shop={shop} />
         <ChatBox messages={messages} />
-        <ChatInput />
+        <ChatInput handleQuestion={this.handleQuestion} />
       </main>
     );
   }
