@@ -29,7 +29,29 @@ class Chat extends Component {
 
   handleQuestion = (text) => {
     const customerMessage = { text, role: 'CUSTOMER' };
-    this.setState((state) => ({ messages: state.messages.concat(customerMessage) }));
+    this.setState(
+      (state) => ({ messages: state.messages.concat(customerMessage) }),
+      () => this.handleAnswer(text)
+    );
+  };
+
+  handleAnswer = (question) => {
+    const answers = [];
+    answersData.forEach((item) => {
+      const { tags } = item;
+      for (let i = 0; i < tags.length; i += 1) {
+        if (tags[i] !== 'DEFAULT' && question.includes(tags[i])) {
+          answers.push(item);
+          break;
+        }
+      }
+    });
+
+    for (let i = 0; i < answers.length; i += 1) {
+      setTimeout(() => {
+        this.setState((state) => ({ messages: state.messages.concat(answers[i]) }));
+      }, (i + 1) * 1000);
+    }
   };
 
   render() {
